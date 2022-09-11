@@ -6,6 +6,12 @@ async function getAll() {
   return camelize(info);
 }
 
+async function getById(id) {
+  const [[info]] = await db.execute('SELECT * FROM StoreManager.products WHERE id=?', [id]);
+  return camelize(info);
+}
+
 module.exports = {
   getAll,
+  getById,
 };
