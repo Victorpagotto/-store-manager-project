@@ -1,13 +1,15 @@
 const { json } = require('body-parser');
 const express = require('express');
-const productsRouter = require('./middlewares/routers/products.router');
+const productsRouter = require('./routers/products.router');
 const validateDB = require('./db/db.validate');
+const standardErrorHandle = require('./middlewares/error');
 
 const app = express();
 validateDB().then((res) => console.log(res));
 
 app.use(json());
 app.use('/products', productsRouter);
+app.use(standardErrorHandle);
 
 // não remova esse endpoint, é para o avaliador funcionar
 app.get('/', (_request, response) => {
