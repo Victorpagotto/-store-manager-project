@@ -21,7 +21,13 @@ const productsMock =
     }
   ];
 
+const productInsert =
+  {
+    name: 'Luva do Infinito'
+  }
+
 module.exports = {
   productsDbMock,
   productsMock,
+  productInsert,
 };

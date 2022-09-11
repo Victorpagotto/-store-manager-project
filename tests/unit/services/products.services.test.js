@@ -4,7 +4,7 @@ const sinon = require('sinon');
 const { expect } = chai;
 
 
-const { productsMock } = require('./servicesMock/productsMock');
+const { productsMock, insertedProductMock, formatProductMock } = require('./servicesMock/productsMock');
 const productsServices = require('../../../src/services/products.services');
 const productsModels = require('../../../src/models/products.models');
 const { productNotFound } = require('./servicesMock/messages');
@@ -29,6 +29,22 @@ describe('Testa serviços de products.', function() {
     sinon.stub(productsModels, 'getById').resolves();
     const result = await productsServices.getById();
     expect(result).to.be.deep.equal({ status: 'NOT_FOUND', result: { message: 'Product not found' } });
+    sinon.restore();
+  });
+
+  it('Testa se um produto pode ser cadastrado com sucesso.', async function () {
+    sinon.stub(productsModels, 'insert').resolves(insertedProductMock);
+    sinon.stub(productsModels, 'getById').resolves(formatProductMock);
+    const result = await productsServices.insert({ name: insertedProductMock.name });
+    expect(result).to.be.deep.equal({ status: 'OK_CREATED', result: formatProductMock });
+    sinon.restore();
+  });
+
+  it('Testa se um produto com menos de 5 caracteres em seu nome não pode ser cadastrado.', async function () {
+    sinon.stub(productsModels, 'insert').resolves({ insertId: insertedProductMock.insertId, name: '1234' });
+    sinon.stub(productsModels, 'getById').resolves(formatProductMock);
+    const result = await productsServices.insert({ name: '1234' });
+    expect(result).to.be.deep.equal({ status: 'BAD_FORMAT', result: { message: '"name" length must be at least 5 characters long' } });
     sinon.restore();
   });
 });

@@ -5,7 +5,7 @@ const { expect } = chai;
 
 const productsServices = require('../../../src/services/products.services');
 const productsControllers = require('../../../src/controllers/products.controllers');
-const { foundAProduct, foundAllProducts } = require('./controllersMocks/productsMocks');
+const { foundAProduct, foundAllProducts, createdProductMock, createdSuccess } = require('./controllersMocks/productsMocks');
 const { productNotFound } = require('./controllersMocks/messages');
 
 describe('Testando controllers de products.', function () {
@@ -42,5 +42,30 @@ describe('Testando controllers de products.', function () {
     await productsControllers.getById(req, res);
     expect(res.status.calledWith(404)).equal(true);
     expect(res.json.calledWith({ message: productNotFound.message })).equal(true);
+    sinon.restore();
+  });
+
+  it('Testa se é possível cadastrar um produto com sucesso.', async function () {
+    sinon.stub(productsServices, 'insert').resolves(createdSuccess);
+    const req = { body: { name: 'Insert here a name' } };
+    const res = {};
+    res.status = sinon.stub().returns(res);
+    res.json = sinon.stub().returns();
+    await productsControllers.insert(req, res);
+    expect(res.status.calledWith(201)).equal(true);
+    expect(res.json.calledWith(createdSuccess.result));
+    sinon.restore();
+  });
+
+  it('Testa se falhar ao não enviar um nome de produto.', async function () {
+    sinon.stub(productsServices, 'insert').resolves();
+    const req = { body: {} };
+    const res = {};
+    res.status = sinon.stub().returns(res);
+    res.json = sinon.stub().returns();
+    await productsControllers.insert(req, res);
+    expect(res.status.calledWith(400)).equal(true);
+    expect(res.json.calledWith({ message: '"name" is required' }));
+    sinon.restore();
   });
 });

@@ -12,7 +12,20 @@ const getById = async (id) => {
   return { status: 'NOT_FOUND', result: { message: 'Product not found' } };
 };
 
+const insert = async (product) => {
+  if (product.name.length > 4) {
+    const info = await productsModels.insert(product);
+    const result = await productsModels.getById(info.insertId);
+    return { status: 'OK_CREATED', result };
+  }
+  return {
+    status: 'BAD_FORMAT',
+    result: { message: '"name" length must be at least 5 characters long' },
+  };
+};
+
 module.exports = {
   getAll,
   getById,
+  insert,
 };

@@ -1,5 +1,6 @@
 const camelize = require('camelize');
 const db = require('../db/connection');
+const { insertWrapper } = require('../utilities/handlers');
 
 async function getAll() {
   const [info] = await db.execute('SELECT * FROM StoreManager.products');
@@ -11,7 +12,15 @@ async function getById(id) {
   return camelize(info);
 }
 
+async function insert(product) {
+  const { keys, placeHolder, values } = insertWrapper(product);
+  const [info] = await db
+    .execute(`INSERT INTO StoreManager.products (${keys}) values(${placeHolder})`, values);
+  return camelize(info);
+}
+
 module.exports = {
   getAll,
   getById,
+  insert,
 };

@@ -2,7 +2,7 @@ const chai = require('chai');
 // const chaiHttp = require('chaiHttp');
 const sinon = require('sinon');
 const { expect } = chai;
-const { productsMock, productsDbMock } = require('./modelsMock/productsMock');
+const { productsMock, productsDbMock, productInsert } = require('./modelsMock/productsMock');
 
 const productsModels = require('../../../src/models/products.models');
 const db = require('../../../src/db/connection');
@@ -21,6 +21,13 @@ describe('Testa os models de produtos.', function() {
     sinon.stub(db, 'execute').resolves([[productDb]]);
     const result = await productsModels.getById(productDb.id);
     expect(result).to.be.deep.equal(product);
+    sinon.restore();
+  });
+
+  it('Testa insert de produto pelo model.', async function () {
+    sinon.stub(db, 'execute').resolves([{ insertId: 666, ...productInsert }]);
+    const result = await productsModels.insert(productInsert);
+    expect(result).to.be.deep.equal({ insertId: 666, ...productInsert });
     sinon.restore();
   });
 });

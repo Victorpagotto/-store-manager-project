@@ -12,6 +12,17 @@ const foundAllProducts = {
   ],
 };
 
+const createdProductMock =
+  {
+    id: 666,
+    name: 'Luva do Infinito'
+}
+
+const createdSuccess = {
+  status: 'OK_CREATED',
+  result: createdProductMock,
+}
+
 const foundAProduct = {
   status: 'OK_FOUND',
   result: {
@@ -23,4 +34,6 @@ const foundAProduct = {
 module.exports = {
   foundAllProducts,
   foundAProduct,
+  createdProductMock,
+  createdSuccess,
 }
