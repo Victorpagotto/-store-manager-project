@@ -5,24 +5,22 @@ const insertSale = async (sale) => {
   return { status: 'OK_CREATED', result: info };
 };
 
-const insertSaleProduct = async (saleProducts, sale) => {
+const insertSaleProduct = async (saleProducts, sale = {}) => {
   if (saleProducts.every((saleItem) => saleItem.quantity > 0)) {
-    const info = await Promise.all(saleProducts.map(async (saleItem) => {
-      const result = await salesModels.insertSaleProduct(saleItem);
+    const saleId = (await insertSale(sale)).result.insertId;
+    await Promise.all(saleProducts.map(async (saleItem) => {
+      const result = await salesModels.insertSaleProduct({
+        saleId,
+        productId: saleItem.productId,
+        quantity: saleItem.quantity, 
+      });
       return result;
     }));
-    const saleInsert = (await insertSale(sale)).result;
-    const result = {
-      id: saleInsert.insertId,
-      itemsSold: info,
-    };
-    return { status: 'OK_CREATED', result };
+    return { status: 'OK_CREATED', result: { id: saleId, itemsSold: saleProducts } };
   }
   return {
     status: 'BAD_FORMAT',
-    result: {
-      message: '"quantity" must be greater than or equal to 1',
-    },
+    result: { message: '"quantity" must be greater than or equal to 1' },
   };
 };
 

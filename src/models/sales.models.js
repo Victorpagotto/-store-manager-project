@@ -8,9 +8,14 @@ const getSaleById = async (id) => {
 };
 
 const insertSale = async (sale) => {
-  const { keys, placeHolder, values } = insertWrapper(sale);
-  const [info] = await db
-    .execute(`INSERT INTO StoreManager.sales (${keys}) values(${placeHolder})`, values);
+  const wrapped = insertWrapper(sale);
+  if (wrapped) {
+    const { keys, placeHolder, values } = wrapped;
+    const [info] = await db
+      .execute(`INSERT INTO StoreManager.sales (${keys}) values(${placeHolder})`, values);
+    return camelize(info);
+  }
+  const [info] = await db.execute('INSERT INTO StoreManager.sales() values()');
   return camelize(info);
 };
 

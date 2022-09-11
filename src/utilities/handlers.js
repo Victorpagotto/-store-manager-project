@@ -7,11 +7,14 @@ const sortObject = (list, key) => {
 };
 
 const insertWrapper = (object) => {
-  const entries = Object.entries(snakeize(object));
-  const keys = entries.map((key) => key[0]).join(', ');
-  const values = entries.map((value) => value[1]);
-  const placeHolder = entries.map((_key) => '?').join(', ');
-  return { keys, values, placeHolder };
+  if (Object.entries(object).length > 0) {
+    const entries = Object.entries(snakeize(object));
+    const keys = entries.map((key) => key[0]).join(', ');
+    const values = entries.map((value) => value[1]);
+    const placeHolder = entries.map((_key) => '?').join(', ');
+    return { keys, values, placeHolder };
+  }
+  return undefined;
 };
 
 module.exports = {
