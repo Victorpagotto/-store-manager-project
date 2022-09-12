@@ -49,4 +49,10 @@ describe('Testa os models de sale.', function () {
     const result = await saleModels.deleter(666);
     expect(result).to.be.deep.equal({ insertId: 666 });
   });
+
+  it('Testa o funcionamento da função update.', async function () {
+    sinon.stub(db, 'execute').resolves([{ insertId: 666 }]);
+    const result = await saleModels.update(666, { productId: 666, quantity: 666 });
+    expect(result).to.be.deep.equal({ insertId: 666 });
+  });
 });

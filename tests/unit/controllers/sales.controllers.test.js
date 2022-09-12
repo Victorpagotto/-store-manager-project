@@ -18,6 +18,7 @@ const {
   saleByIdFoundResponse,
   saleByIdNotFoundResponse,
   saleGetAllResponse,
+  saleUpdateSuccessResponse,
   } = require('./controllersMocks/salesMocks');
 
 describe('Testa os controllers de sales.', function () {
@@ -104,5 +105,53 @@ describe('Testa os controllers de sales.', function () {
     await salesControllers.deleter(req, res);
     expect(res.status.calledWith(204)).equal(true);
     expect(res.json.calledWith()).equal(true);
+  });
+
+  it('Testa se é possível atualizar um produto.', async function () {
+    sinon.stub(salesServices, 'update').resolves(saleUpdateSuccessResponse);
+    sinon.stub(productsServices, 'getById').resolves(productServicesResponse);
+    const req = { body: saleUpdateSuccessResponse.result.itemsUpdated, params: { id: 666 } };
+    const res = {};
+    res.status = sinon.stub().returns(res);
+    res.json = sinon.stub().returns();
+    await salesControllers.update(req, res);
+    expect(res.status.calledWith(200)).equal(true);
+    expect(res.json.calledWith(saleUpdateSuccessResponse.result)).equal(true);
+  });
+  
+  it('Testa se nao é possível cadastrar um produto sem quantidade.', async function () {
+    sinon.stub(salesServices, 'update').resolves(false);
+    sinon.stub(productsServices, 'getById').resolves(productServicesResponse);
+    const req = { body: noQuantityArray, params: { id: 666 } };
+    const res = {};
+    res.status = sinon.stub().returns(res);
+    res.json = sinon.stub().returns();
+    await salesControllers.update(req, res);
+    expect(res.status.calledWith(400)).equal(true);
+    expect(res.json.calledWith({ message: responsesSales.noQuantity.message })).equal(true);
+  });
+
+  it('Testa se nao é possível cadastrar um produto sem productId.', async function () {
+    sinon.stub(salesServices, 'update').resolves(false);
+    sinon.stub(productsServices, 'getById').resolves(productServicesResponse);
+    const req = { body: noProductIdArray, params: { id: 666 } };
+    const res = {};
+    res.status = sinon.stub().returns(res);
+    res.json = sinon.stub().returns();
+    await salesControllers.update(req, res);
+    expect(res.status.calledWith(400)).equal(true);
+    expect(res.json.calledWith({ message: responsesSales.noProductId.message })).equal(true);
+  });
+
+  it('Testa se nao é possível cadastrar um produto sem quantidade.', async function () {
+    sinon.stub(salesServices, 'update').resolves(false);
+    sinon.stub(productsServices, 'getById').resolves(productServicesReponseFalse);
+    const req = { body: saleUpdateSuccessResponse.result.itemsUpdated, params: { id: 666 } };
+    const res = {};
+    res.status = sinon.stub().returns(res);
+    res.json = sinon.stub().returns();
+    await salesControllers.update(req, res);
+    expect(res.status.calledWith(404)).equal(true);
+    expect(res.json.calledWith({ message: responsesSales.noProductFound.message })).equal(true);
   });
 });

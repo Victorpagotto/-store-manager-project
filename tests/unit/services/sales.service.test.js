@@ -6,7 +6,12 @@ const { expect } = chai;
 const salesModels = require('../../../src/models/sales.models');
 const salesServices = require('../../../src/services/sales.services');
 
-const { saleExempleMock, buggedSaleExempleMock, getByIdResponse, getAllResponse } = require('./servicesMock/salesMock');
+const {
+  saleExempleMock,
+  buggedSaleExempleMock,
+  getByIdResponse,
+  getAllResponse,
+} = require('./servicesMock/salesMock');
 
 describe('Testa os services de sales.', function () {
   afterEach(function () {
@@ -66,5 +71,26 @@ describe('Testa os services de sales.', function () {
     sinon.stub(salesModels, 'getSaleById').resolves(false);
     const result = await salesServices.deleter(666);
     expect(result).to.be.deep.equal({ status: 'NOT_FOUND', result: { message: 'Sale not found' } });
+  });
+
+  it('Testa se não é possível atualizar uma sale que não existe.', async function () {
+    sinon.stub(salesModels, 'getSaleById').resolves(undefined);
+    sinon.stub(salesModels, 'update').resolves();
+    const result = await salesServices.update(666, saleExempleMock);
+    expect(result).to.be.deep.equal({ status: 'NOT_FOUND', result: { message: 'Sale not found' } });
+  });
+
+  it('Testa o funcionamento padrão de update de uma sale.', async function () {
+    sinon.stub(salesModels, 'getSaleById').resolves(true);
+    sinon.stub(salesModels, 'update').resolves({ insertId: 666 });
+    const result = await salesServices.update(666, saleExempleMock);
+    expect(result).to.be.deep.equal({ status: 'OK_FOUND', result: { saleId: 666, itemsUpdated: [...saleExempleMock] } });
+  });
+
+    it('Testa se não é possível atualizar uma quantity menor que ou igual a 0.', async function () {
+    sinon.stub(salesModels, 'getSaleById').resolves(true);
+    sinon.stub(salesModels, 'update').resolves({ insertId: 666 });
+    const result = await salesServices.update(666, buggedSaleExempleMock);
+    expect(result).to.be.deep.equal({ status: 'BAD_FORMAT', result: { message: '"quantity" must be greater than or equal to 1' }, });
   });
 });

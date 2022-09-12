@@ -47,7 +47,7 @@ describe('Testa serviços de products.', function () {
     expect(result).to.be.deep.equal({ status: 'BAD_FORMAT', result: { message: '"name" length must be at least 5 characters long' } });
   });
 
-  it('Testa se não é possível atualiar um produto que não existe.', async function () {
+  it('Testa se não é possível atualizar um produto que não existe.', async function () {
     sinon.stub(productsModels, 'getById').resolves(undefined);
     const result = await productsServices.update(666, { name: 'Cavalo de Tróia.' });
     expect(result).to.be.deep.equal({ status: 'NOT_FOUND', result: { message: 'Product not found' } });

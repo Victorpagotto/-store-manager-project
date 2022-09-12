@@ -47,6 +47,11 @@ const getByIdResponse = [
   }
 ];
 
+const sales = [
+  {productId:2,quantity:999},
+  {productId:3,quantity: 1},
+];
+
 const productServicesResponse = { status: 'OK_FOUND', result: { insertId: 1, productName: 'Martelo de Thor' } };
 
 const productServicesReponseFalse = { status: 'NOT_FOUND', result: { message: 'Product not found' } };
@@ -59,6 +64,8 @@ const saleByIdNotFoundResponse = { status: 'NOT_FOUND', result: { message: 'Sale
 
 const saleGetAllResponse = { status: 'OK_FOUND', result: getAllResponse };
 
+const saleUpdateSuccessResponse = { status: 'OK_FOUND', result: { saleId: 666, itemsUpdated: [...sales] } }
+
 module.exports = {
   saleResponse,
   productArray,
@@ -70,4 +77,5 @@ module.exports = {
   saleByIdFoundResponse,
   saleByIdNotFoundResponse,
   saleGetAllResponse,
+  saleUpdateSuccessResponse,
 }
