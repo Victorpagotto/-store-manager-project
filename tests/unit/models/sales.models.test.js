@@ -6,25 +6,42 @@ const { expect } = chai;
 const saleModels = require('../../../src/models/sales.models');
 const db = require('../../../src/db/connection');
 
+const { getByIdResponse, getAllResponse } = require('./modelsMock/salesMock');
+const snakeize = require('snakeize');
+
 describe('Testa os models de sale.', function () {
+  afterEach(function () {
+    sinon.restore();
+  });
+  
   it('Testa o funcionamento de getSaleById', async function () {
     sinon.stub(db, 'execute').resolves([[{ insertId: 666 }]]);
     const result = await saleModels.getSaleById(666);
     expect(result).to.be.deep.equal({ insertId: 666 });
-    sinon.restore();
   });
 
   it('Testa o funcionamento da função insertSale.', async function () {
     sinon.stub(db, 'execute').resolves([{ insertId: 666 }]);
     const result = await saleModels.insertSale();
     expect(result).to.be.deep.equal({ insertId: 666 });
-    sinon.restore();
   });
 
-  it('', async function () {
+  it('Testa o funcionamento da função insertSaleProduct.', async function () {
     sinon.stub(db, 'execute').resolves([{ insertId: 666 }]);
     const result = await saleModels.insertSaleProduct({ productId: 666, quantity: 666 });
     expect(result).to.be.deep.equal({ insertId: 666 });
-    sinon.restore();
+  });
+
+  it('Testa o funcionamento da função getById', async function () {
+    sinon.stub(db, 'execute').resolves([snakeize(getByIdResponse)]);
+    const result = await saleModels.getById(1);
+    console.log(result);
+    expect(result).to.be.deep.equal(getByIdResponse);
+  });
+
+  it('Testa o funcionamento da função getAll', async function () {
+    sinon.stub(db, 'execute').resolves([snakeize(getAllResponse)]);
+    const result = await saleModels.getAll();
+    expect(result).to.be.deep.equal(getAllResponse);
   });
 });

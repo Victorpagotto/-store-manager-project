@@ -6,14 +6,17 @@ const { expect } = chai;
 const salesModels = require('../../../src/models/sales.models');
 const salesServices = require('../../../src/services/sales.services');
 
-const { saleExempleMock, buggedSaleExempleMock } = require('./servicesMock/salesMock');
+const { saleExempleMock, buggedSaleExempleMock, getByIdResponse, getAllResponse } = require('./servicesMock/salesMock');
 
 describe('Testa os services de sales.', function () {
+  afterEach(function () {
+    sinon.restore();
+  });
+
   it('Testa o insertSale.', async function () {
     sinon.stub(salesModels, 'insertSale').resolves({ insertId: 666 });
     const result = await salesServices.insertSale();
     expect(result).to.be.deep.equal({ status: 'OK_CREATED', result: { insertId: 666 } });
-    sinon.restore();
   });
 
   it('Testa o funcionamento da insertSaleProduct', async function () {
@@ -21,7 +24,6 @@ describe('Testa os services de sales.', function () {
     sinon.stub(salesModels, 'insertSaleProduct').resolves([{ insertId: 600 }, { insertId: 666 }]);
     const result = await salesServices.insertSaleProduct(saleExempleMock);
     expect(result).to.be.deep.equal({ status: 'OK_CREATED', result: { id: 666, itemsSold: saleExempleMock } });
-    sinon.restore();
   });
 
   it('Testa o funcionamento de insertSaleProduct no caso de quantity negativa.', async function () {
@@ -32,6 +34,23 @@ describe('Testa os services de sales.', function () {
       status: 'BAD_FORMAT',
       result: { message: '"quantity" must be greater than or equal to 1' }
     });
-    sinon.restore();
+  });
+
+  it('Testa o funcionamento da função getById.', async function () {
+    sinon.stub(salesModels, 'getById').resolves(getByIdResponse);
+    const result = await salesServices.getById(1);
+    expect(result).to.be.deep.equal({ status: 'OK_FOUND', result: getByIdResponse });
+  });
+
+  it('Testa o funcionamento da função getById para caso o produto não exista.', async function () {
+    sinon.stub(salesModels, 'getById').resolves([]);
+    const result = await salesServices.getById(666);
+    expect(result).to.be.deep.equal({ status: 'NOT_FOUND', result: { message: 'Sale not found' } });
+  });
+
+  it('Testa o funcionamento da função getAll.', async function () {
+    sinon.stub(salesModels, 'getAll').resolves(getAllResponse);
+    const result = await salesServices.getAll();
+    expect(result).to.be.deep.equal({ status: 'OK_FOUND', result: getAllResponse });
   });
 });

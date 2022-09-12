@@ -9,6 +9,10 @@ const { foundAProduct, foundAllProducts, createdProductMock, createdSuccess } = 
 const { productNotFound } = require('./controllersMocks/messages');
 
 describe('Testando controllers de products.', function () {
+  afterEach(function () {
+    sinon.restore();
+  });
+  
   it('Testa retorno de lista de /products', async function () {
     sinon.stub(productsServices, 'getAll').resolves(foundAllProducts);
     const req = {};
@@ -18,7 +22,6 @@ describe('Testando controllers de products.', function () {
     await productsControllers.getAll(req, res);
     expect(res.status.calledWith(200)).equal(true);
     expect(res.json.calledWith(foundAllProducts.result)).equal(true);
-    sinon.restore();
   });
 
   it('Testa o retorna caso encontre um produto pelo id em /products/:id', async function() {
@@ -30,7 +33,6 @@ describe('Testando controllers de products.', function () {
     await productsControllers.getById(req, res);
     expect(res.status.calledWith(200)).equal(true);
     expect(res.json.calledWith(foundAProduct.result)).equal(true);
-    sinon.restore();
   });
 
   it('Testa o retorno caso nenhum produto seja encontrado em /products/:id', async function () {
@@ -42,7 +44,6 @@ describe('Testando controllers de products.', function () {
     await productsControllers.getById(req, res);
     expect(res.status.calledWith(404)).equal(true);
     expect(res.json.calledWith({ message: productNotFound.message })).equal(true);
-    sinon.restore();
   });
 
   it('Testa se é possível cadastrar um produto com sucesso.', async function () {
@@ -54,7 +55,6 @@ describe('Testando controllers de products.', function () {
     await productsControllers.insert(req, res);
     expect(res.status.calledWith(201)).equal(true);
     expect(res.json.calledWith(createdSuccess.result));
-    sinon.restore();
   });
 
   it('Testa se falhar ao não enviar um nome de produto.', async function () {
@@ -66,6 +66,5 @@ describe('Testando controllers de products.', function () {
     await productsControllers.insert(req, res);
     expect(res.status.calledWith(400)).equal(true);
     expect(res.json.calledWith({ message: '"name" is required' }));
-    sinon.restore();
   });
 });
