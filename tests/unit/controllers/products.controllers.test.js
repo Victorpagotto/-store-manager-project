@@ -5,7 +5,7 @@ const { expect } = chai;
 
 const productsServices = require('../../../src/services/products.services');
 const productsControllers = require('../../../src/controllers/products.controllers');
-const { foundAProduct, foundAllProducts, createdProductMock, createdSuccess } = require('./controllersMocks/productsMocks');
+const { foundAProduct, foundAllProducts, createdProductMock, createdSuccess, updatedSuccess } = require('./controllersMocks/productsMocks');
 const { productNotFound } = require('./controllersMocks/messages');
 
 describe('Testando controllers de products.', function () {
@@ -54,7 +54,7 @@ describe('Testando controllers de products.', function () {
     res.json = sinon.stub().returns();
     await productsControllers.insert(req, res);
     expect(res.status.calledWith(201)).equal(true);
-    expect(res.json.calledWith(createdSuccess.result));
+    expect(res.json.calledWith(createdSuccess.result)).equal(true);
   });
 
   it('Testa se falhar ao não enviar um nome de produto.', async function () {
@@ -65,6 +65,28 @@ describe('Testando controllers de products.', function () {
     res.json = sinon.stub().returns();
     await productsControllers.insert(req, res);
     expect(res.status.calledWith(400)).equal(true);
-    expect(res.json.calledWith({ message: '"name" is required' }));
+    expect(res.json.calledWith({ message: '"name" is required' })).equal(true);
+  });
+
+  it('Testa se é possível modificar um produto com sucesso.', async function () {
+    sinon.stub(productsServices, 'update').resolves(updatedSuccess);
+    const req = { body: { name: 'Cavalo de Tróia' }, params: {  id: 666 } };
+    const res = {};
+    res.status = sinon.stub().returns(res);
+    res.json = sinon.stub().returns();
+    await productsControllers.update(req, res);
+    expect(res.status.calledWith(200)).equal(true);
+    expect(res.json.calledWith(updatedSuccess.result)).equal(true);
+  });
+
+  it('Testa se não é possível cadastrar um produto sem nome.', async function () {
+    sinon.stub(productsServices, 'update').resolves();
+    const req = { body: {}, params: { id: 666 } };
+    const res = {};
+    res.status = sinon.stub().returns(res);
+    res.json = sinon.stub().returns();
+    await productsControllers.update(req, res);
+    expect(res.status.calledWith(400)).equal(true);
+    expect(res.json.calledWith({ message: '"name" is required' })).equal(true);
   });
 });

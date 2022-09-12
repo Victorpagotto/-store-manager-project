@@ -46,4 +46,24 @@ describe('Testa serviços de products.', function () {
     const result = await productsServices.insert({ name: '1234' });
     expect(result).to.be.deep.equal({ status: 'BAD_FORMAT', result: { message: '"name" length must be at least 5 characters long' } });
   });
+
+  it('Testa se não é possível atualiar um produto que não existe.', async function () {
+    sinon.stub(productsModels, 'getById').resolves(undefined);
+    const result = await productsServices.update(666, { name: 'Cavalo de Tróia.' });
+    expect(result).to.be.deep.equal({ status: 'NOT_FOUND', result: { message: 'Product not found' } });
+  });
+
+  it('Testa o funcionamento padrão de update de produto.', async function () {
+    sinon.stub(productsModels, 'getById').resolves(formatProductMock);
+    sinon.stub(productsModels, 'update').resolves({ insertId: 666 });
+    const result = await productsServices.update(666, { name: 'Cavalo de Tróia.' });
+    expect(result).to.be.deep.equal({ status: 'OK_FOUND', result: { id: 666, name: 'Cavalo de Tróia.' } });
+  });
+
+  it('Testa o funcionamento de update para caso o nome seja muito curto.', async function () {
+    sinon.stub(productsModels, 'getById').resolves(formatProductMock);
+    sinon.stub(productsModels, 'update').resolves({ insertId: 666 });
+    const result = await productsServices.update(666, { name: 'Calo' });
+    expect(result).to.be.deep.equal({ status: 'BAD_FORMAT', result: { message: '"name" length must be at least 5 characters long' } });
+  });
 });

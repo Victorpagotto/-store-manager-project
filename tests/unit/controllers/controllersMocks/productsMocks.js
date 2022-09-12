@@ -23,6 +23,8 @@ const createdSuccess = {
   result: createdProductMock,
 }
 
+const updatedSuccess = { status: 'OK_FOUND', result: { id: 666, name: 'Cavalo de Tróia.' } };
+
 const foundAProduct = {
   status: 'OK_FOUND',
   result: {
@@ -36,4 +38,5 @@ module.exports = {
   foundAProduct,
   createdProductMock,
   createdSuccess,
+  updatedSuccess,
 }
