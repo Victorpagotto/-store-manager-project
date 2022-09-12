@@ -37,4 +37,10 @@ describe('Testa os models de produtos.', function () {
     const result = await productsModels.update(666, productsMock[0]);
     expect(result).to.be.deep.equal({ insertId: 666 });
   });
+
+  it('Testa função de deletar produtos.', async function () {
+    sinon.stub(db, 'execute').resolves([{ insertId: 666 }]);
+    const result = await productsModels.deleter(666);
+    expect(result).to.be.deep.equal({ insertId: 666 });
+  });
 });

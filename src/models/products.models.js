@@ -29,9 +29,15 @@ async function update(id, product) {
   return camelize(info);
 }
 
+async function deleter(id) {
+  const [info] = await db.execute('DELETE FROM StoreManager.products WHERE id = ?', [id]);
+  return camelize(info);
+}
+
 module.exports = {
   getAll,
   getById,
   insert,
   update,
+  deleter,
 };

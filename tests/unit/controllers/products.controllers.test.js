@@ -89,4 +89,15 @@ describe('Testando controllers de products.', function () {
     expect(res.status.calledWith(400)).equal(true);
     expect(res.json.calledWith({ message: '"name" is required' })).equal(true);
   });
+
+  it('Testa se não é possível cadastrar um produto sem nome.', async function () {
+    sinon.stub(productsServices, 'deleter').resolves({ status: 'OK_DELETED' });
+    const req = { body: {}, params: { id: 666 } };
+    const res = {};
+    res.status = sinon.stub().returns(res);
+    res.json = sinon.stub().returns();
+    await productsControllers.deleter(req, res);
+    expect(res.status.calledWith(204)).equal(true);
+    expect(res.json.calledWith()).equal(true);
+  });
 });

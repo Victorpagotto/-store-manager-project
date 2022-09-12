@@ -35,7 +35,6 @@ describe('Testa os models de sale.', function () {
   it('Testa o funcionamento da função getById', async function () {
     sinon.stub(db, 'execute').resolves([snakeize(getByIdResponse)]);
     const result = await saleModels.getById(1);
-    console.log(result);
     expect(result).to.be.deep.equal(getByIdResponse);
   });
 

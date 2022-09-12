@@ -66,4 +66,18 @@ describe('Testa serviços de products.', function () {
     const result = await productsServices.update(666, { name: 'Calo' });
     expect(result).to.be.deep.equal({ status: 'BAD_FORMAT', result: { message: '"name" length must be at least 5 characters long' } });
   });
+
+  it('Testa a função de deletar um produto.', async function () {
+    sinon.stub(productsModels, 'deleter').resolves(true);
+    sinon.stub(productsModels, 'getById').resolves(true);
+    const result = await productsServices.deleter(666);
+    expect(result).to.be.deep.equal({ status: 'OK_DELETED' });
+  });
+
+    it('Testa o retorno caso o produto não exista.', async function () {
+    sinon.stub(productsModels, 'deleter').resolves(true);
+    sinon.stub(productsModels, 'getById').resolves(false);
+    const result = await productsServices.deleter(666);
+    expect(result).to.be.deep.equal({ status: 'NOT_FOUND', result: { message: 'Product not found' } });
+  });
 });

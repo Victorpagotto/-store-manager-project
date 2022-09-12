@@ -37,9 +37,17 @@ const update = async (req, res) => {
   return res.status(statusHandler('BAD_REQUEST')).json({ message: '"name" is required' });
 };
 
+const deleter = async (req, res) => {
+  const { id } = req.params;
+  const info = await productsServices.deleter(id);
+  const { status, result } = info;
+  return res.status(statusHandler(status)).json(result);
+};
+
 module.exports = {
   getAll,
   getById,
   insert,
   update,
+  deleter,
 };
