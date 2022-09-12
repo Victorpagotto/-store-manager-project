@@ -42,10 +42,24 @@ const deleter = async (id) => {
   return { status: 'OK_DELETED' };
 };
 
+const update = async (id, sales) => {
+  const isProduct = await salesModels.getSaleById(id);
+  if (!isProduct) return { status: 'NOT_FOUND', result: { message: 'Sale not found' } };
+  if (sales.every((saleItem) => saleItem.quantity > 0)) {
+    await Promise.all(sales.map(async (sale) => salesModels.update(id, sale)));
+    return { status: 'OK_FOUND', result: { saleId: id, itemsUpdated: [...sales] } };
+  }
+  return {
+    status: 'BAD_FORMAT',
+    result: { message: '"quantity" must be greater than or equal to 1' },
+  };
+};
+
 module.exports = {
   insertSale,
   insertSaleProduct,
   getById,
   getAll,
   deleter,
+  update,
 };

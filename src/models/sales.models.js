@@ -1,4 +1,5 @@
 const camelize = require('camelize');
+const snakeize = require('snakeize');
 const db = require('../db/connection');
 const { insertWrapper } = require('../utilities/handlers');
 
@@ -44,6 +45,20 @@ async function deleter(id) {
   return camelize(info);
 }
 
+async function update(id, product) {
+  const wrapping = Object.entries(snakeize(product));
+  const keys = wrapping.map((key) => `${key[0]}`);
+  const values = wrapping.map((value) => value[1]);
+  const statement = keys.map((key) => `${key} = ?`).join(', ');
+  const [info] = await db
+    .execute(`
+    UPDATE StoreManager.sales_products
+    SET ${statement} 
+    WHERE sale_id = ? AND product_id = ?`,
+      [...values, id, product.productId]);
+  return camelize(info);
+}
+
 module.exports = {
   insertSale,
   insertSaleProduct,
@@ -51,4 +66,5 @@ module.exports = {
   getAll,
   getById,
   deleter,
+  update,
 };
