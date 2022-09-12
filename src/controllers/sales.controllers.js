@@ -26,8 +26,16 @@ const getAll = async (_req, res) => {
   res.status(statusHandler(status)).json(result);
 };
 
+const deleter = async (req, res) => {
+  const { id } = req.params;
+  const info = await salesServices.deleter(id);
+  const { status, result } = info;
+  return res.status(statusHandler(status)).json(result);
+};
+
 module.exports = {
   insertSaleProduct,
   getById,
   getAll,
+  deleter,
 };

@@ -38,10 +38,17 @@ const getAll = async () => {
   return camelize(info);
 };
 
+async function deleter(id) {
+  await db.execute('DELETE FROM StoreManager.sales_products WHERE sale_id = ?', [id]);
+  const [info] = await db.execute('DELETE FROM StoreManager.sales WHERE id = ?', [id]);
+  return camelize(info);
+}
+
 module.exports = {
   insertSale,
   insertSaleProduct,
   getSaleById,
   getAll,
   getById,
+  deleter,
 };

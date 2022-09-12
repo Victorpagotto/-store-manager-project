@@ -35,9 +35,17 @@ const getAll = async () => {
   return { status: 'OK_FOUND', result: info };
 };
 
+const deleter = async (id) => {
+  const isProduct = await salesModels.getSaleById(id);
+  if (!isProduct) return { status: 'NOT_FOUND', result: { message: 'Sale not found' } };
+  await salesModels.deleter(id);
+  return { status: 'OK_DELETED' };
+};
+
 module.exports = {
   insertSale,
   insertSaleProduct,
   getById,
   getAll,
+  deleter,
 };

@@ -74,7 +74,7 @@ describe('Testa serviços de products.', function () {
     expect(result).to.be.deep.equal({ status: 'OK_DELETED' });
   });
 
-    it('Testa o retorno caso o produto não exista.', async function () {
+  it('Testa o retorno de delete caso o produto não exista.', async function () {
     sinon.stub(productsModels, 'deleter').resolves(true);
     sinon.stub(productsModels, 'getById').resolves(false);
     const result = await productsServices.deleter(666);
