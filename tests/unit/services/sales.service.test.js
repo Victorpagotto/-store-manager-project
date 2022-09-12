@@ -53,4 +53,18 @@ describe('Testa os services de sales.', function () {
     const result = await salesServices.getAll();
     expect(result).to.be.deep.equal({ status: 'OK_FOUND', result: getAllResponse });
   });
+
+  it('Testa a função de deletar um sale.', async function () {
+    sinon.stub(salesModels, 'deleter').resolves(true);
+    sinon.stub(salesModels, 'getSaleById').resolves(true);
+    const result = await salesServices.deleter(666);
+    expect(result).to.be.deep.equal({ status: 'OK_DELETED' });
+  });
+
+  it('Testa o retorno de delete caso a sale não exista.', async function () {
+    sinon.stub(salesModels, 'deleter').resolves(true);
+    sinon.stub(salesModels, 'getSaleById').resolves(false);
+    const result = await salesServices.deleter(666);
+    expect(result).to.be.deep.equal({ status: 'NOT_FOUND', result: { message: 'Sale not found' } });
+  });
 });

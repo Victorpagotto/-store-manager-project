@@ -94,4 +94,15 @@ describe('Testa os controllers de sales.', function () {
     expect(res.status.calledWith(200)).equal(true);
     expect(res.json.calledWith(saleGetAllResponse.result)).equal(true);
   });
+
+  it('Testa se não é possível cadastrar uma sale sem nome.', async function () {
+    sinon.stub(salesServices, 'deleter').resolves({ status: 'OK_DELETED' });
+    const req = { body: {}, params: { id: 666 } };
+    const res = {};
+    res.status = sinon.stub().returns(res);
+    res.json = sinon.stub().returns();
+    await salesControllers.deleter(req, res);
+    expect(res.status.calledWith(204)).equal(true);
+    expect(res.json.calledWith()).equal(true);
+  });
 });

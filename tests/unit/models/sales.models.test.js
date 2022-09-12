@@ -43,4 +43,10 @@ describe('Testa os models de sale.', function () {
     const result = await saleModels.getAll();
     expect(result).to.be.deep.equal(getAllResponse);
   });
+
+  it('Testa função de deletar sales.', async function () {
+    sinon.stub(db, 'execute').resolves([{ insertId: 666 }]);
+    const result = await saleModels.deleter(666);
+    expect(result).to.be.deep.equal({ insertId: 666 });
+  });
 });
