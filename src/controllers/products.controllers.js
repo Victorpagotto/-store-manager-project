@@ -44,10 +44,24 @@ const deleter = async (req, res) => {
   return res.status(statusHandler(status)).json(result);
 };
 
+const getByName = async (req, res) => {
+  if (req.query.q) {
+    const { q } = req.query;
+    const name = q;
+    const info = await productsServices.getByName(name);
+    const { status, result } = info;
+    return res.status(statusHandler(status)).json(result);
+  }
+  const info = await productsServices.getAll();
+  const { status, result } = info;
+  res.status(statusHandler(status)).json(result);
+};
+
 module.exports = {
   getAll,
   getById,
   insert,
   update,
   deleter,
+  getByName,
 };

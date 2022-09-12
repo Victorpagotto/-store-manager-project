@@ -44,10 +44,20 @@ const deleter = async (id) => {
   return { status: 'OK_DELETED' };
 };
 
+const getByName = async (name) => {
+  const products = await productsModels.getAll();
+  const productFiltered = products.filter((product) => product.name.includes(name));
+  if (productFiltered.length > 0) {
+    return { status: 'OK_FOUND', result: productFiltered };
+  }
+  return { status: 'OK_FOUND', result: products };
+};
+
 module.exports = {
   getAll,
   getById,
   insert,
   update,
   deleter,
+  getByName,
 };
