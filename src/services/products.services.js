@@ -29,8 +29,7 @@ const update = async (id, product) => {
   if (!isProduct) return { status: 'NOT_FOUND', result: { message: 'Product not found' } };
   if (product.name.length > 4) {
     const info = await productsModels.update(id, product);
-    const result = await productsModels.getById(info.insertId);
-    return { status: 'OK_FOUND', result };
+    return { status: 'OK_FOUND', result: { id: info.insertId, ...product } };
   }
   return {
     status: 'BAD_FORMAT',
