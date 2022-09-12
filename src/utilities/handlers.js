@@ -6,7 +6,7 @@ const sortObject = (list, key) => {
   return undefined;
 };
 
-const insertWrapper = (object) => {
+const insertWrapper = (object = {}) => {
   if (Object.entries(object).length > 0) {
     const entries = Object.entries(snakeize(object));
     const keys = entries.map((key) => key[0]).join(', ');
@@ -14,7 +14,7 @@ const insertWrapper = (object) => {
     const placeHolder = entries.map((_key) => '?').join(', ');
     return { keys, values, placeHolder };
   }
-  return undefined;
+  return { keys: [], values: [], placeHolder: [] };
 };
 
 module.exports = {

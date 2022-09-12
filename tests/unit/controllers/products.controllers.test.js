@@ -27,7 +27,7 @@ describe('Testando controllers de products.', function () {
     const res = {};
     res.status = sinon.stub().returns(res);
     res.json = sinon.stub().returns();
-    await productsControllers.getById(req, res)
+    await productsControllers.getById(req, res);
     expect(res.status.calledWith(200)).equal(true);
     expect(res.json.calledWith(foundAProduct.result)).equal(true);
     sinon.restore();

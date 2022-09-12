@@ -3,19 +3,15 @@ const db = require('../db/connection');
 const { insertWrapper } = require('../utilities/handlers');
 
 const getSaleById = async (id) => {
-  const [[info]] = db.execute(`SELECT * FROM StoreManager.sales WHERE id = ${id}`);
+  const [[info]] = await db.execute(`SELECT * FROM StoreManager.sales WHERE id = ${id}`);
   return camelize(info);
 };
 
 const insertSale = async (sale) => {
   const wrapped = insertWrapper(sale);
-  if (wrapped) {
-    const { keys, placeHolder, values } = wrapped;
-    const [info] = await db
-      .execute(`INSERT INTO StoreManager.sales (${keys}) values(${placeHolder})`, values);
-    return camelize(info);
-  }
-  const [info] = await db.execute('INSERT INTO StoreManager.sales() values()');
+  const { keys, placeHolder, values } = wrapped;
+  const [info] = await db
+    .execute(`INSERT INTO StoreManager.sales (${keys}) values(${placeHolder})`, values);
   return camelize(info);
 };
 
