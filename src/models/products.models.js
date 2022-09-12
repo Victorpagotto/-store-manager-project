@@ -19,8 +19,19 @@ async function insert(product) {
   return camelize(info);
 }
 
+async function update(id, product) {
+  const wrapping = Object.entries(product);
+  const keys = wrapping.map((key) => `${key[0]}`);
+  const values = wrapping.map((value) => value[1]);
+  const statement = keys.map((key) => `${key} = ?`).join(', ');
+  const [info] = await db
+    .execute(`UPDATE StoreManager.products SET ${statement} WHERE id = ?`, [...values, id]);
+  return camelize(info);
+}
+
 module.exports = {
   getAll,
   getById,
   insert,
+  update,
 };

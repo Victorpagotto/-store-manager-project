@@ -25,8 +25,21 @@ const insert = async (req, res) => {
   return res.status(statusHandler('BAD_REQUEST')).json({ message: '"name" is required' });
 };
 
+const update = async (req, res) => {
+  const { id } = req.params;
+  if (req.body.name) {
+    const { name } = req.body;
+    const product = { name };
+    const info = await productsServices.update(id, product);
+    const { status, result } = info;
+    return res.status(statusHandler(status)).json(result);
+  }
+  return res.status(statusHandler('BAD_REQUEST')).json({ message: '"name" is required' });
+};
+
 module.exports = {
   getAll,
   getById,
   insert,
+  update,
 };
