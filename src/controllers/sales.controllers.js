@@ -13,6 +13,21 @@ const insertSaleProduct = async (req, res) => {
   return res.status(statusHandler(validation.status)).json({ message: validation.message });
 };
 
+const getById = async (req, res) => {
+  const { id } = req.params;
+  const info = await salesServices.getById(id);
+  const { status, result } = info;
+  res.status(statusHandler(status)).json(result);
+};
+
+const getAll = async (_req, res) => {
+  const info = await salesServices.getAll();
+  const { status, result } = info;
+  res.status(statusHandler(status)).json(result);
+};
+
 module.exports = {
   insertSaleProduct,
+  getById,
+  getAll,
 };

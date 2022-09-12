@@ -22,8 +22,26 @@ const insertSaleProduct = async (saleProduct) => {
   return camelize(info);
 };
 
+const getById = async (id) => {
+  const [info] = await db.execute(`
+  SELECT ss.date, ssp.product_id, ssp.quantity 
+  FROM StoreManager.sales AS ss
+  JOIN StoreManager.sales_products AS ssp
+  ON ss.id = ssp.sale_id WHERE ss.id = ?;`, [id]);
+  return camelize(info);
+};
+
+const getAll = async () => {
+  const [info] = await db
+    .execute(`SELECT * FROM StoreManager.sales_products AS ssp
+    JOIN StoreManager.sales AS ss ON ss.id = ssp.sale_id`);
+  return camelize(info);
+};
+
 module.exports = {
   insertSale,
   insertSaleProduct,
   getSaleById,
+  getAll,
+  getById,
 };

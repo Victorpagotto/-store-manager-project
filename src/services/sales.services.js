@@ -24,7 +24,20 @@ const insertSaleProduct = async (saleProducts, sale = {}) => {
   };
 };
 
+const getById = async (id) => {
+  const info = await salesModels.getById(id);
+  if (info.length > 0) return { status: 'OK_FOUND', result: info };
+  return { status: 'NOT_FOUND', result: { message: 'Sale not found' } };
+};
+
+const getAll = async () => {
+  const info = await salesModels.getAll();
+  return { status: 'OK_FOUND', result: info };
+};
+
 module.exports = {
   insertSale,
   insertSaleProduct,
+  getById,
+  getAll,
 };

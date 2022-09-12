@@ -1,7 +1,7 @@
 const productsServices = require('../services/products.services');
 const { statusHandler } = require('../utilities/statusHandler');
 
-const getAll = async (req, res) => {
+const getAll = async (_req, res) => {
     const info = await productsServices.getAll();
     const { status, result } = info;
     res.status(statusHandler(status)).json(result);
