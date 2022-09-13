@@ -2,11 +2,11 @@ const productsMock =
   [
     {
       "id": 1,
-      "productName": "Martelo de Thor"
+      "name": "Martelo de Thor"
     },
     {
       "id": 2,
-      "productName": "Traje de encolhimento"
+      "name": "Traje de encolhimento"
     }
   ];
 

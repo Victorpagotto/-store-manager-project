@@ -12,6 +12,17 @@ const foundAllProducts = {
   ],
 };
 
+const productList = [
+  {
+    "id": 1,
+    "productName": "Martelo de Thor"
+  },
+  {
+    "id": 2,
+    "productName": "Traje de encolhimento"
+  }
+];
+
 const createdProductMock =
   {
     id: 666,
@@ -39,4 +50,5 @@ module.exports = {
   createdProductMock,
   createdSuccess,
   updatedSuccess,
+  productList,
 }

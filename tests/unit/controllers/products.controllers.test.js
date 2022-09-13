@@ -5,7 +5,14 @@ const { expect } = chai;
 
 const productsServices = require('../../../src/services/products.services');
 const productsControllers = require('../../../src/controllers/products.controllers');
-const { foundAProduct, foundAllProducts, createdProductMock, createdSuccess, updatedSuccess } = require('./controllersMocks/productsMocks');
+const {
+  foundAProduct,
+  foundAllProducts,
+  createdProductMock,
+  createdSuccess,
+  updatedSuccess,
+  productList
+} = require('./controllersMocks/productsMocks');
 const { productNotFound } = require('./controllersMocks/messages');
 
 describe('Testando controllers de products.', function () {
@@ -99,5 +106,28 @@ describe('Testando controllers de products.', function () {
     await productsControllers.deleter(req, res);
     expect(res.status.calledWith(204)).equal(true);
     expect(res.json.calledWith()).equal(true);
+  });
+
+  it('Testa a resposta padrão da função.', async function () {
+    sinon.stub(productsServices, 'getByName').resolves({ status: 'OK_FOUND', result: [productList[0]] });
+    const req = { query: { q: 'Martelo' } };
+    const res = {};
+    res.status = sinon.stub().returns(res);
+    res.json = sinon.stub().returns();
+    await productsControllers.getByName(req, res);
+    expect(res.status.calledWith(200)).equal(true);
+    expect(res.json.calledWith([productList[0]])).equal(true);
+  });
+
+    it('Testa se retorna todos os produtos caso não haja um nome na query.', async function () {
+    sinon.stub(productsServices, 'getByName').resolves();
+    sinon.stub(productsServices, 'getAll').resolves({ status: 'OK_FOUND', result: productList });
+    const req = { query: {} };
+    const res = {};
+    res.status = sinon.stub().returns(res);
+    res.json = sinon.stub().returns();
+    await productsControllers.getByName(req, res);
+    expect(res.status.calledWith(200)).equal(true);
+    expect(res.json.calledWith(productList)).equal(true);
   });
 });

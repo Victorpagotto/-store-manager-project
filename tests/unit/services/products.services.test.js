@@ -80,4 +80,16 @@ describe('Testa serviços de products.', function () {
     const result = await productsServices.deleter(666);
     expect(result).to.be.deep.equal({ status: 'NOT_FOUND', result: { message: 'Product not found' } });
   });
+  
+  it('Testa se é possível buscar por nome.', async function () {
+    sinon.stub(productsModels, 'getAll').resolves(productsMock);
+    const result = await productsServices.getByName('Martelo');
+    expect(result).to.be.deep.equal({ status: 'OK_FOUND', result: [productsMock[0]] });
+  });
+
+  it('Testa se tornar todos ao encontrar nenhum.', async function () {
+    sinon.stub(productsModels, 'getAll').resolves(productsMock);
+    const result = await productsServices.getByName('Martelo que não existe, pode pesquisar.');
+    expect(result).to.be.deep.equal({ status: 'OK_FOUND', result: productsMock });
+  });
 });
