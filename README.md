@@ -7,7 +7,7 @@
 
 **Conhecimentos Usados**: JavaScript e MySQL.
 
-**Ferramentas usadas**: Node.js, Express e MySQL.
+**Ferramentas usadas**: Node.js, Express, chai, sinon e MySQL.
 
 **Número de Pessoas**: 1 (sozinho).
 
@@ -15,10 +15,10 @@
 
 <h3 align="center">Descrição</h3>
 
-<p align="justify"></p>
-<p align="justify"></p>
-<p align="justify"></p>
-<p align="justify"></p>
+<p align="justify">Esta é uma aplicação construída com base na estrutura MSC: model, service e controller. Construído sobre a ideia de dropshipping, é possível com ela realizar o CRUD: criar, ver, mudar e apagar produtos e vendas. A gestão de dados acontece através de um banco de dados MySQL, com as queries devidamente criadas dentro dos models. Além disso, tendo sido criada dentro dos princípios de arquitetura REST, a aplicação mantém a integridade de recebimento, manejo e resposta de dados.</p>
+<p align="justify">A separação dos elementos da aplicação em camadas garante uma maior facilidade de atualização em caso de necessidade, pois o código encarregado de cada categoria de tarefas é desacoplado. Por exemplo, mudar o banco de dados causaria mudanças apenas na camada de models, e uma mudança de regra de negócios apenas afetaria a de service.</p>
+<p align="justify">Este projeto conta também com testes unitários para cada camada e função dentro da estrutura MSC, garantindo uma maior integridade de código. Estes testes são feitos utilizando-se das ferramentas chai e sinon para se realizar o mock e a verificação da integridade.</p>
+<p align="justify">Tendo sido o primeiro projeto feito por mim na estrutura MSC, o maior desafio foi visualizar as nuâncias e precisões no que tange as diferenças entre as camadas e a exata função de cada uma delas, algo resolvido através do pensamento abstrato a respeito do que deveria ou não ser afetado de acordo a possível necessidade de uma mudança no código no futuro, e como isso deveria ou não afetar cada camada.</p>
 
 -----------------------
 
