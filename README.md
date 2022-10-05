@@ -50,10 +50,10 @@
 
 <h3 align="center">Description</h3>
 
-<p align="justify"></p>
-<p align="justify"></p>
-<p align="justify"></p>
-<p align="justify"></p>
+<p align="justify">This is an application built on MSC: model, service and controller. Made with the idea of dropshipping, it is capable of CRUD: create, view, change and delete, of products and sales. Data is managed using a MySQL database, with queries properly created within the models. In addition, it has been created within the principles of REST architecture, thus the application maintains the integrity of receiving, handling and responding data.</p>
+<p align="justify">The separation of the application's elements into layers guarantees better updating if necessary, as the code in charge of each task category is decoupled. For example, changing the database would only change the models layer, and a change of business rules would only affect the service layer.</p>
+<p align="justify">This project also has unit testing for each layer and function within the MSC layers, ensuring greater code integrity. These tests are done using the chai and sinon tools for the mocking and integrity checking.</p>
+<p align="justify">Being this the first project made by me in the MSC, the biggest challenge was to visualize the nuances and precisions regarding the differences between the layers and the exact functionality of each one of them, something solved through abstract thinking about what should or shouldn't be affected according to the possible need for a code change in the future, and how each layer would be affected by it.</p>
 
 -----------------------
 
