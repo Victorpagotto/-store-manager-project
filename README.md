@@ -42,8 +42,7 @@
 
 **Used Knowledges**: JavaScript and MySQL.
 
-**Used Tools**: Node.js, Express and MySQL.
-
+**Used Tools**: Node.js, Express, chai, sinon and MySQL.
 **Number of People**: 1 (solo).
 
 -----------------------
